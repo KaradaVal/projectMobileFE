@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:project01/data/theme.dart';
+import 'package:project01/data/user.dart';
 import 'package:project01/screens/mainPage.dart';
 import 'package:project01/screens/registerPage.dart';
 import 'package:provider/provider.dart';
@@ -19,6 +20,7 @@ class _loginPageState extends State<loginPage> {
   bool _validUser = true;
   bool _validPass = true;
   bool _isObscured = true;
+  bool found = false;
 
   void checkValid() {
     setState(() {
@@ -112,22 +114,58 @@ class _loginPageState extends State<loginPage> {
                       height: 8,
                     ),
                     SizedBox(
-                      child: ElevatedButton(
-                          onPressed: () {
-                            checkValid();
-                            if (_validUser && _validPass) {
-                              Navigator.of(context)
-                                  .pushReplacement(MaterialPageRoute(
-                                      builder: (context) => mainPage(
-                                            currentPage: 0,
-                                            genre: "",
-                                          )));
-                            }
-                          },
-                          child: Text(
-                            "LOGIN",
-                            style: TextStyle(fontWeight: FontWeight.bold),
-                          )),
+                      child: Consumer<userManager>(
+                          builder: (context, value, child) {
+                        return ElevatedButton(
+                            onPressed: () {
+                              checkValid();
+                              found = false;
+                              if (_validUser && _validPass) {
+                                for (var element in value.listUsers) {
+                                  if (element.username ==
+                                          _controllerUser.text &&
+                                      element.password ==
+                                          _controllerPass.text) {
+                                    value.changeUser(element);
+                                    Navigator.of(context)
+                                        .pushReplacement(MaterialPageRoute(
+                                            builder: (context) => mainPage(
+                                                  currentPage: 0,
+                                                  genre: "",
+                                                )));
+                                    // errorActive = false;
+                                    ScaffoldMessenger.of(context)
+                                        .showSnackBar(SnackBar(
+                                      backgroundColor: Colors.green,
+                                      duration: Duration(seconds: 5),
+                                      content: Text(
+                                        "Berhasil Login",
+                                      ),
+                                      action: SnackBarAction(
+                                          label: "OKE", onPressed: () {}),
+                                    ));
+                                    found = true;
+                                  }
+                                }
+                                if (!found) {
+                                  ScaffoldMessenger.of(context)
+                                      .showSnackBar(SnackBar(
+                                    backgroundColor: Colors.red,
+                                    duration: Duration(seconds: 5),
+                                    content: Text(
+                                      "Salah Password / Username",
+                                    ),
+                                    // action: SnackBarAction(
+                                    //     label: "OKE", onPressed: () {}),
+                                  ));
+                                }
+                              }
+                            },
+                            child: Text(
+                              "LOGIN",
+                              style: TextStyle(fontWeight: FontWeight.bold),
+                            ));
+                      }),
                       height: 30,
                       width: double.infinity,
                     ),

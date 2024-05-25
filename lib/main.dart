@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:project01/data/listComic.dart';
 import 'package:project01/data/theme.dart';
+import 'package:project01/data/user.dart';
 import 'package:project01/screens/homePage.dart';
 import 'package:project01/screens/mainPage.dart';
 import 'package:project01/screens/mangaPage.dart';
@@ -10,7 +11,8 @@ void main() {
   runApp(MultiProvider(
     providers: [
       ChangeNotifierProvider(create: (context) => comicListManager()),
-      ChangeNotifierProvider(create: (context) => themeManager())
+      ChangeNotifierProvider(create: (context) => themeManager()),
+      ChangeNotifierProvider(create: (context) => userManager()),
     ],
     child: MyApp(),
   ));

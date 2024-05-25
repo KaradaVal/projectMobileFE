@@ -45,22 +45,15 @@ class _mainPageState extends State<mainPage> {
         ),
         centerTitle: true,
         actions: [
-          Switch(
-            activeColor: Colors.purple,
-            value: Provider.of<themeManager>(context).mode,
-            onChanged: (value) {
-              Provider.of<themeManager>(context, listen: false).changeMode();
-            },
-          ),
-          ElevatedButton(
-              onPressed: () {
-                Navigator.of(context).pushReplacement(
-                    MaterialPageRoute(builder: (context) => loginPage()));
-              },
-              child: Text("Login")),
-          SizedBox(
-            width: 10,
-          ),
+          // ElevatedButton(
+          //     onPressed: () {
+          // Navigator.of(context).pushReplacement(
+          //     MaterialPageRoute(builder: (context) => loginPage()));
+          //     },
+          //     child: Text("Login")),
+          // SizedBox(
+          //   width: 10,
+          // ),
           IconButton(
               onPressed: () {
                 Navigator.of(context).push(
@@ -91,6 +84,114 @@ class _mainPageState extends State<mainPage> {
               widget.currentPage = index;
             })
           },
+        ),
+      ),
+      drawer: Drawer(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Column(
+              children: [
+                Container(
+                  height: 160,
+                  width: double.infinity,
+                  color: Provider.of<themeManager>(context).mode
+                      ? Colors.grey.shade900
+                      : Colors.grey.shade400,
+                  child: Padding(
+                    padding:
+                        const EdgeInsets.symmetric(horizontal: 12, vertical: 0),
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.end,
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        CircleAvatar(
+                          radius: 45,
+                        ),
+                        SizedBox(
+                          height: 8,
+                        ),
+                        Text('Nama Lengkap'),
+                        Text('Email@gmail.com'),
+                        SizedBox(
+                          height: 8,
+                        )
+                      ],
+                    ),
+                  ),
+                ),
+                ListTile(
+                  onTap: () => {
+                    setState(() {
+                      widget.currentPage = 0;
+                    }),
+                    Navigator.pop(context)
+                  },
+                  leading: Icon(Icons.home),
+                  title: Text("HOME"),
+                ),
+                ListTile(
+                  onTap: () => {
+                    setState(() {
+                      widget.currentPage = 1;
+                    }),
+                    Navigator.pop(context)
+                  },
+                  leading: Icon(Icons.favorite),
+                  title: Text("LIST"),
+                ),
+                ListTile(
+                  onTap: () => {
+                    setState(() {
+                      widget.currentPage = 2;
+                    }),
+                    Navigator.pop(context)
+                  },
+                  leading: Icon(Icons.book),
+                  title: Text("BOOKMARK"),
+                ),
+                Divider(),
+                ListTile(
+                  leading: Icon(Icons.settings),
+                  title: Text("Settings"),
+                ),
+                Divider(),
+                ListTile(
+                  title: Text(
+                    "${!Provider.of<themeManager>(context).mode ? "Light" : "Dark"} Mode",
+                    style: TextStyle(
+                        color: Provider.of<themeManager>(context).mode
+                            ? Colors.white
+                            : Colors.black),
+                  ),
+                  trailing: !Provider.of<themeManager>(context).mode
+                      ? Icon(Icons.light_mode)
+                      : Icon(Icons.dark_mode),
+                  leading: Switch(
+                    value: Provider.of<themeManager>(context).mode,
+                    onChanged: (value) {
+                      Provider.of<themeManager>(context, listen: false)
+                          .changeMode();
+                    },
+                  ),
+                ),
+                Divider(),
+              ],
+            ),
+            Column(
+              children: [
+                Divider(),
+                ListTile(
+                  onTap: () => {
+                    Navigator.of(context).pushReplacement(
+                        MaterialPageRoute(builder: (context) => loginPage()))
+                  },
+                  leading: Icon(Icons.logout),
+                  title: Text("LogOut"),
+                ),
+              ],
+            )
+          ],
         ),
       ),
       body: pageList[widget.currentPage],
