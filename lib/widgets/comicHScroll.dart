@@ -35,7 +35,6 @@ class comicHScroll extends StatelessWidget {
           children: listComic.map((e) {
             return comicCard(
               comicData: e,
-              isBookmark: e.isBookmark,
               judul: e.judul,
               cover: e.cover,
               id: e.id,

@@ -5,7 +5,7 @@ class userModel {
   String email;
   String password;
 
-  final Set<comicModel> _bookmark = {};
+  final Set<comicModel> bookmark = {};
   //! NOTE CHAPTER LIST;
   // List <Map<String,dynamic>> chapter = [
   //   {

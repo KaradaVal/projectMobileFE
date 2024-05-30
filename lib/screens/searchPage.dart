@@ -72,7 +72,6 @@ class _searchPageState extends State<searchPage> {
                           padding: const EdgeInsets.all(8.0),
                           child: comicCard(
                               comicData: e,
-                              isBookmark: e.isBookmark,
                               id: e.id,
                               judul: e.judul,
                               cover: e.cover),

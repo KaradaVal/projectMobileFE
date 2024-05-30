@@ -118,7 +118,7 @@ class comicListManager with ChangeNotifier {
           {
             "judul": "One Piece",
             "chapter": 0,
-            "comicPage": [
+            "pageComic": [
               "https://ytimgf.youtube-anime.com/images138/ex9vXC6gWYY9bGkSo/1/sub/1.png",
               "https://ytimgf.youtube-anime.com/images138/ex9vXC6gWYY9bGkSo/1/sub/2.png",
               "https://ytimgf.youtube-anime.com/images138/ex9vXC6gWYY9bGkSo/1/sub/3.png",
@@ -221,7 +221,7 @@ class comicListManager with ChangeNotifier {
           {
             "judul": "The Greatest Estate Developer",
             "chapter": 0,
-            "comicPage": [],
+            "pageComic": ['NONE'],
           }
         ],
         lastChapter: "1",
@@ -239,7 +239,7 @@ class comicListManager with ChangeNotifier {
           {
             "judul": "Im The Max Level Newbie",
             "chapter": 0,
-            "comicPage": [
+            "pageComic": [
               "https://ytimgf.youtube-anime.com/images137/S2vgaxGkeMZhcNHdS/0/sub/1.png",
               "https://ytimgf.youtube-anime.com/images137/S2vgaxGkeMZhcNHdS/0/sub/2.jpg",
               "https://ytimgf.youtube-anime.com/images137/S2vgaxGkeMZhcNHdS/0/sub/3.jpg",
@@ -274,7 +274,7 @@ class comicListManager with ChangeNotifier {
           {
             "judul": "Dungeon Meshi",
             "chapter": 0,
-            "comicPage": [
+            "pageComic": [
               "https://ytimgf.youtube-anime.com/images/5mnDWxdhiWM7fEAxJ/0/sub_1.jpg",
               "https://ytimgf.youtube-anime.com/images/5mnDWxdhiWM7fEAxJ/0/sub_2.jpg",
               "https://ytimgf.youtube-anime.com/images/5mnDWxdhiWM7fEAxJ/0/sub_3.jpg",
@@ -301,7 +301,7 @@ class comicListManager with ChangeNotifier {
           {
             "judul": "Ranker's Return",
             "chapter": 0,
-            "comicPage": [
+            "pageComic": [
               "https://ytimgf.youtube-anime.com/images139/fi3vZRTkCeCpGkpWp/1/sub/1.jpg",
               "https://ytimgf.youtube-anime.com/images139/fi3vZRTkCeCpGkpWp/1/sub/2.png",
               "https://ytimgf.youtube-anime.com/images139/fi3vZRTkCeCpGkpWp/1/sub/3.png",

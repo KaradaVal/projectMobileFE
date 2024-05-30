@@ -1,4 +1,7 @@
+import 'dart:js';
+
 import 'package:flutter/material.dart';
+import 'package:project01/models/comicModel.dart';
 import 'package:project01/models/userModel.dart';
 
 class userManager with ChangeNotifier {
@@ -10,7 +13,18 @@ class userManager with ChangeNotifier {
         password: "12345678"),
   ];
 
+  void checkBookmark(item) {
+    if (!currentUser.bookmark.contains(item)) {
+      currentUser.bookmark.add(item);
+    } else {
+      currentUser.bookmark.remove(item);
+    }
+    notifyListeners();
+  }
+
   late userModel currentUser;
+
+  bool isLogin = false;
 
   void addUser(username, email, passwd) {
     listUsers
@@ -42,5 +56,10 @@ class userManager with ChangeNotifier {
 
   void changeUser(value) {
     currentUser = value;
+    isLogin = true;
+  }
+
+  void logOut() {
+    isLogin = false;
   }
 }

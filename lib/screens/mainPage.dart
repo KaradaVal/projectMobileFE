@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:project01/data/listComic.dart';
 import 'package:project01/data/theme.dart';
+import 'package:project01/data/user.dart';
 import 'package:project01/models/comicModel.dart';
 import 'package:project01/screens/bookmarkPage.dart';
 import 'package:project01/screens/homePage.dart';
@@ -63,29 +64,49 @@ class _mainPageState extends State<mainPage> {
         ],
       ),
       bottomNavigationBar: NavigationBarTheme(
-        data: NavigationBarThemeData(
-          indicatorColor: Colors.blue.shade100,
-        ),
-        child: NavigationBar(
-          indicatorColor: Colors.blueGrey,
-          destinations: [
-            NavigationDestination(
-                icon: Icon(
-                  Icons.home,
-                ),
-                label: "Home"),
-            NavigationDestination(icon: Icon(Icons.list), label: "List"),
-            NavigationDestination(
-                icon: Icon(Icons.bookmark), label: "Bookmark"),
-          ],
-          selectedIndex: widget.currentPage,
-          onDestinationSelected: (index) => {
-            setState(() {
-              widget.currentPage = index;
-            })
-          },
-        ),
-      ),
+          data: NavigationBarThemeData(
+            indicatorColor: Colors.blue.shade100,
+          ),
+          child: Consumer<userManager>(builder: (context, value, child) {
+            return NavigationBar(
+              indicatorColor: Colors.blueGrey,
+              destinations: [
+                NavigationDestination(
+                    icon: Icon(
+                      Icons.home,
+                    ),
+                    label: "Home"),
+                NavigationDestination(icon: Icon(Icons.list), label: "List"),
+                NavigationDestination(
+                    icon: Icon(Icons.bookmark), label: "Bookmark"),
+              ],
+              selectedIndex: widget.currentPage,
+              onDestinationSelected: (index) => {
+                setState(() {
+                  ScaffoldMessenger.of(context).hideCurrentMaterialBanner();
+                  if (index == 2 && !value.isLogin) {
+                    ScaffoldMessenger.of(context).showMaterialBanner(
+                        MaterialBanner(
+                            leading: Icon(Icons.login),
+                            content: Text("Login Terlebih Dahulu"),
+                            actions: [
+                          TextButton(
+                              onPressed: () {
+                                ScaffoldMessenger.of(context)
+                                    .hideCurrentMaterialBanner();
+                                Navigator.of(context).pushReplacement(
+                                    MaterialPageRoute(
+                                        builder: (context) => loginPage()));
+                              },
+                              child: Text("Login"))
+                        ]));
+                  } else {
+                    widget.currentPage = index;
+                  }
+                })
+              },
+            );
+          })),
       drawer: Drawer(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -111,8 +132,16 @@ class _mainPageState extends State<mainPage> {
                         SizedBox(
                           height: 8,
                         ),
-                        Text('Nama Lengkap'),
-                        Text('Email@gmail.com'),
+                        Text(!Provider.of<userManager>(context).isLogin
+                            ? "Guest"
+                            : Provider.of<userManager>(context)
+                                .currentUser
+                                .username),
+                        Text(!Provider.of<userManager>(context).isLogin
+                            ? "Guest"
+                            : Provider.of<userManager>(context)
+                                .currentUser
+                                .email),
                         SizedBox(
                           height: 8,
                         )
@@ -164,10 +193,10 @@ class _mainPageState extends State<mainPage> {
                             ? Colors.white
                             : Colors.black),
                   ),
-                  trailing: !Provider.of<themeManager>(context).mode
+                  leading: !Provider.of<themeManager>(context).mode
                       ? Icon(Icons.light_mode)
                       : Icon(Icons.dark_mode),
-                  leading: Switch(
+                  trailing: Switch(
                     value: Provider.of<themeManager>(context).mode,
                     onChanged: (value) {
                       Provider.of<themeManager>(context, listen: false)
@@ -184,10 +213,13 @@ class _mainPageState extends State<mainPage> {
                 ListTile(
                   onTap: () => {
                     Navigator.of(context).pushReplacement(
-                        MaterialPageRoute(builder: (context) => loginPage()))
+                        MaterialPageRoute(builder: (context) => loginPage())),
+                    Provider.of<userManager>(context).logOut(),
                   },
                   leading: Icon(Icons.logout),
-                  title: Text("LogOut"),
+                  title: Text(Provider.of<userManager>(context).isLogin
+                      ? "LogOut"
+                      : "LogIn"),
                 ),
               ],
             )

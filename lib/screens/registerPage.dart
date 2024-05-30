@@ -1,3 +1,5 @@
+// ignore_for_file: prefer_const_literals_to_create_immutables, prefer_const_constructors, sort_child_properties_last
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
@@ -190,24 +192,94 @@ class _registerPageState extends State<registerPage> {
                                   }
                                 }
                                 if (!added) {
-                                  value.addUser(
-                                      _controllerUser.text,
-                                      _controllerEmail.text,
-                                      _controllerPass.text);
-                                  ScaffoldMessenger.of(context)
-                                      .showSnackBar(SnackBar(
-                                    backgroundColor: Colors.green,
-                                    duration: Duration(seconds: 5),
-                                    content: Text(
-                                      "Berhasil Register",
-                                    ),
-                                    action: SnackBarAction(
-                                        label: "OKE", onPressed: () {}),
-                                  ));
-                                  added = true;
-                                  Navigator.of(context).pushReplacement(
-                                      MaterialPageRoute(
-                                          builder: (context) => loginPage()));
+                                  showDialog(
+                                      context: context,
+                                      builder: (context) {
+                                        return AlertDialog(
+                                          icon: Icon(
+                                            Icons.rule,
+                                            size: 30,
+                                            color: Colors.red,
+                                          ),
+                                          title: Text("RULES",
+                                              style: TextStyle(
+                                                  color: Colors.grey.shade900,
+                                                  fontSize: 30,
+                                                  fontWeight: FontWeight.bold)),
+                                          content: SizedBox(
+                                            height: 150,
+                                            child: Column(
+                                              crossAxisAlignment:
+                                                  CrossAxisAlignment.start,
+                                              children: [
+                                                Text(
+                                                  "1. Baca Komik Sesuai Usia.",
+                                                  style: TextStyle(
+                                                      color:
+                                                          Colors.grey.shade800,
+                                                      fontSize: 20,
+                                                      fontWeight:
+                                                          FontWeight.bold),
+                                                ),
+                                                Text(
+                                                    "2. Dilarang Mencuri Konten & Komik.",
+                                                    style: TextStyle(
+                                                        color: Colors
+                                                            .grey.shade800,
+                                                        fontSize: 20,
+                                                        fontWeight:
+                                                            FontWeight.bold)),
+                                                Text(
+                                                    "3. Dilarang Menggunakan Layanan untuk Tujuan Ilegal.",
+                                                    style: TextStyle(
+                                                        color: Colors
+                                                            .grey.shade800,
+                                                        fontSize: 20,
+                                                        fontWeight:
+                                                            FontWeight.bold))
+                                              ],
+                                            ),
+                                          ),
+                                          actions: [
+                                            TextButton(
+                                                onPressed: () {
+                                                  Navigator.of(context).pop();
+                                                },
+                                                child: Text("NO")),
+                                            TextButton(
+                                                onPressed: () {
+                                                  setState(() {
+                                                    value.addUser(
+                                                        _controllerUser.text,
+                                                        _controllerEmail.text,
+                                                        _controllerPass.text);
+                                                    ScaffoldMessenger.of(
+                                                            context)
+                                                        .showSnackBar(SnackBar(
+                                                      backgroundColor:
+                                                          Colors.green,
+                                                      duration:
+                                                          Duration(seconds: 5),
+                                                      content: Text(
+                                                        "Berhasil Register",
+                                                      ),
+                                                      action: SnackBarAction(
+                                                          label: "OKE",
+                                                          onPressed: () {}),
+                                                    ));
+                                                    added = true;
+                                                  });
+                                                  Navigator.of(context).pop();
+                                                  Navigator.of(context)
+                                                      .pushReplacement(
+                                                          MaterialPageRoute(
+                                                              builder: (context) =>
+                                                                  loginPage()));
+                                                },
+                                                child: Text("AGREE"))
+                                          ],
+                                        );
+                                      });
                                 }
                                 if (added) {
                                   ScaffoldMessenger.of(context)
@@ -238,7 +310,7 @@ class _registerPageState extends State<registerPage> {
                                   builder: (context) => loginPage()));
                         },
                         child:
-                            Text("Already Have Account? Click Here To Login"))
+                            Text("Already Have Account? Click Here To Login")),
                   ],
                 ),
               ),
