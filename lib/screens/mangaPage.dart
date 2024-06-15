@@ -127,7 +127,26 @@ class mangaPage extends StatelessWidget {
               ),
               Container(
                 child: Column(
-                  children: comicPageList.map((e) => Image.network(e)).toList(),
+                  children: comicPageList
+                      .map((e) => Image.network(
+                            e,
+                            loadingBuilder: (context, child, loadingProgress) {
+                              if (loadingProgress == null) {
+                                return child;
+                              } else {
+                                return Padding(
+                                  padding: const EdgeInsets.all(8.0),
+                                  child: Center(
+                                    child: LinearProgressIndicator(
+                                      color: Colors.purple,
+                                      // strokeWidth: 5,
+                                    ),
+                                  ),
+                                );
+                              }
+                            },
+                          ))
+                      .toList(),
                 ),
               ),
               DropdownButton<int>(
