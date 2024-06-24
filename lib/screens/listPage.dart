@@ -18,6 +18,8 @@ class _listPageState extends State<listPage> {
   Set<String> listGenre = {};
   Set<String> selectedGenre = {};
 
+  double _sliderValue = 2;
+
   void initState() {
     for (dynamic i in listComic) {
       for (dynamic j in i.genre) {
@@ -60,6 +62,20 @@ class _listPageState extends State<listPage> {
               ),
             )),
           ),
+          Slider(
+              value: _sliderValue,
+              divisions: 3,
+              min: 1,
+              max: 4,
+              activeColor: Colors.purple,
+              thumbColor: Colors.purple,
+              overlayColor: MaterialStatePropertyAll(Colors.purple),
+              label: "${_sliderValue.toInt()}",
+              onChanged: (value) {
+                setState(() {
+                  _sliderValue = value;
+                });
+              }),
           Divider(
             height: 5,
             color: Colors.grey,
@@ -67,10 +83,10 @@ class _listPageState extends State<listPage> {
           Expanded(
             child: Consumer<comicListManager>(builder: (context, value, child) {
               return GridView(
-                gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
                     mainAxisSpacing: 0,
                     crossAxisSpacing: 0,
-                    crossAxisCount: 2,
+                    crossAxisCount: _sliderValue.toInt(),
                     childAspectRatio: 1 / 1.25),
                 children: value.listComic
                     .where((element) {
