@@ -77,7 +77,7 @@ class _mainPageState extends State<mainPage> {
           //   width: 10,
           // ),
           Text(
-            "${currentTime.hour.toString()} : ${currentTime.minute.toString()} : ${DateTime.now().second < 10 ? "0" : ""}${DateTime.now().second}",
+            "${currentTime.hour < 10 ? "0" : ""}${currentTime.hour.toString()} : ${currentTime.minute < 10 ? "0" : ""}${currentTime.minute.toString()} : ${DateTime.now().second < 10 ? "0" : ""}${DateTime.now().second}",
             style: TextStyle(fontSize: 13),
           ),
           IconButton(
