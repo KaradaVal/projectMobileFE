@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:project01/data/listComic.dart';
 import 'package:project01/data/theme.dart';
@@ -25,6 +27,25 @@ class _mainPageState extends State<mainPage> {
   bool mode = themeManager().mode;
 
   List<comicModel> listComic = comicListManager().listComic;
+
+  TimeOfDay currentTime = TimeOfDay.now();
+  void initState() {
+    bool done = false;
+    Timer.periodic(Duration(seconds: 1), (timer) {
+      setState(() {
+        if (DateTime.now().second == 0) {
+          if (done == false) {
+            currentTime = TimeOfDay(
+                hour: currentTime.hour, minute: currentTime.minute + 1);
+            done = true;
+          }
+        }
+        if (DateTime.now().second == 1) {
+          done = false;
+        }
+      });
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -55,6 +76,10 @@ class _mainPageState extends State<mainPage> {
           // SizedBox(
           //   width: 10,
           // ),
+          Text(
+            "${currentTime.hour.toString()} : ${currentTime.minute.toString()} : ${DateTime.now().second < 10 ? "0" : ""}${DateTime.now().second}",
+            style: TextStyle(fontSize: 13),
+          ),
           IconButton(
               onPressed: () {
                 Navigator.of(context).push(

@@ -1,5 +1,3 @@
-import 'dart:js';
-
 import 'package:flutter/material.dart';
 import 'package:project01/models/comicModel.dart';
 import 'package:project01/models/userModel.dart';
