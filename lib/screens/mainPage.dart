@@ -1,10 +1,12 @@
 import 'dart:async';
+import 'dart:io';
 
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:dots_indicator/dots_indicator.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:project01/data/listComic.dart';
 import 'package:project01/data/theme.dart';
 import 'package:project01/data/user.dart';
@@ -28,6 +30,18 @@ class mainPage extends StatefulWidget {
 }
 
 class _mainPageState extends State<mainPage> {
+  File _selectedImage = File("");
+  Future _getImageFromGallery() async {
+    XFile? pickedImage = await ImagePicker()
+        .pickImage(source: ImageSource.gallery, maxHeight: 500, maxWidth: 500);
+    if (pickedImage != null) {
+      setState(() {
+        File file = File(pickedImage.path);
+        _selectedImage = file;
+      });
+    }
+  }
+
   bool mode = themeManager().mode;
 
   int currentDrawerSliderIndex = 0;
@@ -138,195 +152,233 @@ class _mainPageState extends State<mainPage> {
               },
             );
           })),
-      drawer: Drawer(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            Column(
-              children: [
-                Stack(children: [
-                  CarouselSlider(
-                      items: [
-                        Container(
-                          height: 160,
-                          width: double.infinity,
-                          color: Provider.of<themeManager>(context).mode
-                              ? Colors.grey.shade900
-                              : Colors.grey.shade400,
-                          child: Padding(
-                            padding: const EdgeInsets.symmetric(
-                                horizontal: 12, vertical: 0),
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.start,
-                              crossAxisAlignment: CrossAxisAlignment.center,
-                              children: [
-                                CircleAvatar(
-                                  radius: 50,
-                                  child: Icon(
-                                    Icons.person,
-                                    size: 70,
+      drawer: Consumer<userManager>(builder: (context, value, child) {
+        return Drawer(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Column(
+                children: [
+                  Stack(children: [
+                    CarouselSlider(
+                        items: [
+                          Container(
+                            height: 160,
+                            width: double.infinity,
+                            color: Provider.of<themeManager>(context).mode
+                                ? Colors.grey.shade900
+                                : Colors.grey.shade400,
+                            child: Padding(
+                              padding: const EdgeInsets.symmetric(
+                                  horizontal: 12, vertical: 0),
+                              child: Row(
+                                mainAxisAlignment: MainAxisAlignment.start,
+                                crossAxisAlignment: CrossAxisAlignment.center,
+                                children: [
+                                  CircleAvatar(
+                                      radius: 50,
+                                      backgroundImage: !value.isLogin
+                                          ? null
+                                          : value.currentUser.pfp != ""
+                                              ? FileImage(value.currentUser.pfp)
+                                              : null,
+                                      child: !value.isLogin
+                                          ? Icon(
+                                              Icons.person,
+                                              size: 70,
+                                            )
+                                          : null),
+                                  SizedBox(
+                                    width: 10,
                                   ),
-                                ),
-                                SizedBox(
-                                  width: 10,
-                                ),
-                                Column(
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    Text(
-                                      !Provider.of<userManager>(context).isLogin
+                                  Column(
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      Text(
+                                        !Provider.of<userManager>(context)
+                                                .isLogin
+                                            ? "Guest"
+                                            : Provider.of<userManager>(context)
+                                                .currentUser
+                                                .username,
+                                        style: TextStyle(
+                                            fontSize: 20,
+                                            fontWeight: FontWeight.bold),
+                                      ),
+                                      Text(!Provider.of<userManager>(context)
+                                              .isLogin
                                           ? "Guest"
                                           : Provider.of<userManager>(context)
                                               .currentUser
-                                              .username,
-                                      style: TextStyle(
-                                          fontSize: 20,
-                                          fontWeight: FontWeight.bold),
-                                    ),
-                                    Text(!Provider.of<userManager>(context)
-                                            .isLogin
-                                        ? "Guest"
-                                        : Provider.of<userManager>(context)
-                                            .currentUser
-                                            .email),
-                                  ],
-                                ),
-                                SizedBox(
-                                  height: 8,
-                                )
-                              ],
-                            ),
-                          ),
-                        ),
-                        Container(
-                          height: 160,
-                          width: double.infinity,
-                          color: Provider.of<themeManager>(context).mode
-                              ? Colors.grey.shade900
-                              : Colors.grey.shade400,
-                          child: Padding(
-                            padding: const EdgeInsets.symmetric(
-                                horizontal: 12, vertical: 0),
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.start,
-                              crossAxisAlignment: CrossAxisAlignment.center,
-                              children: [
-                                CircleAvatar(
-                                  radius: 50,
-                                  child: Icon(
-                                    Icons.person,
-                                    size: 70,
+                                              .email),
+                                    ],
                                   ),
-                                ),
-                                SizedBox(
-                                  width: 10,
-                                ),
-                                ElevatedButton(
-                                    onPressed: () {},
-                                    child: Text(
-                                      "Change Profile \n Picture",
-                                      textAlign: TextAlign.center,
-                                    )),
-                              ],
+                                  SizedBox(
+                                    height: 8,
+                                  )
+                                ],
+                              ),
                             ),
                           ),
-                        ),
-                      ],
-                      options: CarouselOptions(
-                        onPageChanged: (index, reason) {
-                          setState(() {
-                            currentDrawerSliderIndex = index;
-                          });
-                        },
-                        viewportFraction: 1,
-                        enableInfiniteScroll: false,
-                      )),
-                  Positioned(
-                      bottom: 10,
-                      left: 115,
-                      child: DotsIndicator(
-                        dotsCount: 2,
-                        position: currentDrawerSliderIndex,
-                      )),
-                ]),
-                ListTile(
-                  onTap: () => {
-                    setState(() {
-                      widget.currentPage = 0;
-                    }),
-                    Navigator.pop(context)
-                  },
-                  leading: Icon(Icons.home),
-                  title: Text("HOME"),
-                ),
-                ListTile(
-                  onTap: () => {
-                    setState(() {
-                      widget.currentPage = 1;
-                    }),
-                    Navigator.pop(context)
-                  },
-                  leading: Icon(Icons.favorite),
-                  title: Text("LIST"),
-                ),
-                ListTile(
-                  onTap: () => {
-                    setState(() {
-                      widget.currentPage = 2;
-                    }),
-                    Navigator.pop(context)
-                  },
-                  leading: Icon(Icons.book),
-                  title: Text("BOOKMARK"),
-                ),
-                Divider(),
-                ListTile(
-                  leading: Icon(Icons.settings),
-                  title: Text("Settings"),
-                ),
-                Divider(),
-                ListTile(
-                  title: Text(
-                    "${!Provider.of<themeManager>(context).mode ? "Light" : "Dark"} Mode",
-                    style: TextStyle(
-                        color: Provider.of<themeManager>(context).mode
-                            ? Colors.white
-                            : Colors.black),
-                  ),
-                  leading: !Provider.of<themeManager>(context).mode
-                      ? Icon(Icons.light_mode)
-                      : Icon(Icons.dark_mode),
-                  trailing: Switch(
-                    value: Provider.of<themeManager>(context).mode,
-                    onChanged: (value) {
-                      Provider.of<themeManager>(context, listen: false)
-                          .changeMode();
+                          Container(
+                            height: 160,
+                            width: double.infinity,
+                            color: Provider.of<themeManager>(context).mode
+                                ? Colors.grey.shade900
+                                : Colors.grey.shade400,
+                            child: Padding(
+                              padding: const EdgeInsets.symmetric(
+                                  horizontal: 12, vertical: 0),
+                              child: Row(
+                                mainAxisAlignment: MainAxisAlignment.start,
+                                crossAxisAlignment: CrossAxisAlignment.center,
+                                children: [
+                                  CircleAvatar(
+                                      radius: 50,
+                                      backgroundImage: !value.isLogin
+                                          ? null
+                                          : value.currentUser.pfp != ""
+                                              ? FileImage(value.currentUser.pfp)
+                                              : null,
+                                      child: !value.isLogin
+                                          ? Icon(
+                                              Icons.person,
+                                              size: 70,
+                                            )
+                                          : null),
+                                  SizedBox(
+                                    width: 10,
+                                  ),
+                                  ElevatedButton(
+                                      onPressed: () async {
+                                        if (!value.isLogin) {
+                                          Navigator.of(context).pop();
+                                          Navigator.of(context).pushReplacement(
+                                              MaterialPageRoute(
+                                                  builder: (context) =>
+                                                      loginPage()));
+                                          return;
+                                        }
+                                        await _getImageFromGallery();
+                                        if (_selectedImage != File("")) {
+                                          value.changePFP(_selectedImage);
+                                        }
+                                      },
+                                      child: Text(
+                                        "Change Profile \n Picture",
+                                        textAlign: TextAlign.center,
+                                      )),
+                                ],
+                              ),
+                            ),
+                          ),
+                        ],
+                        options: CarouselOptions(
+                          onPageChanged: (index, reason) {
+                            setState(() {
+                              currentDrawerSliderIndex = index;
+                            });
+                          },
+                          viewportFraction: 1,
+                          enableInfiniteScroll: false,
+                        )),
+                    Positioned(
+                        bottom: 10,
+                        left: 115,
+                        child: DotsIndicator(
+                          dotsCount: 2,
+                          position: currentDrawerSliderIndex,
+                        )),
+                  ]),
+                  ListTile(
+                    onTap: () => {
+                      setState(() {
+                        widget.currentPage = 0;
+                      }),
+                      Navigator.pop(context)
                     },
+                    leading: Icon(Icons.home),
+                    title: Text("HOME"),
                   ),
-                ),
-                Divider(),
-              ],
-            ),
-            Column(
-              children: [
-                Divider(),
-                ListTile(
-                  onTap: () => {
-                    Navigator.of(context).pushReplacement(
-                        MaterialPageRoute(builder: (context) => loginPage())),
-                    Provider.of<userManager>(context).logOut(),
-                  },
-                  leading: Icon(Icons.logout),
-                  title: Text(Provider.of<userManager>(context).isLogin
-                      ? "LogOut"
-                      : "LogIn"),
-                ),
-              ],
-            )
-          ],
-        ),
-      ),
+                  ListTile(
+                    onTap: () => {
+                      setState(() {
+                        widget.currentPage = 1;
+                      }),
+                      Navigator.pop(context)
+                    },
+                    leading: Icon(Icons.list),
+                    title: Text("LIST"),
+                  ),
+                  ListTile(
+                    onTap: () => {
+                      if (!value.isLogin)
+                        {
+                          Navigator.of(context).pushReplacement(
+                              MaterialPageRoute(
+                                  builder: (context) => loginPage())),
+                        }
+                      else
+                        {
+                          setState(() {
+                            widget.currentPage = 2;
+                          }),
+                          Navigator.pop(context)
+                        },
+                    },
+                    leading: Icon(Icons.bookmark),
+                    title: Text("BOOKMARK"),
+                  ),
+                  Divider(),
+                  ListTile(
+                    leading: Icon(Icons.settings),
+                    title: Text("Settings"),
+                  ),
+                  Divider(),
+                  ListTile(
+                    title: Text(
+                      "${!Provider.of<themeManager>(context).mode ? "Light" : "Dark"} Mode",
+                      style: TextStyle(
+                          color: Provider.of<themeManager>(context).mode
+                              ? Colors.white
+                              : Colors.black),
+                    ),
+                    leading: !Provider.of<themeManager>(context).mode
+                        ? Icon(Icons.light_mode)
+                        : Icon(Icons.dark_mode),
+                    trailing: Switch(
+                      value: Provider.of<themeManager>(context).mode,
+                      onChanged: (value) {
+                        Provider.of<themeManager>(context, listen: false)
+                            .changeMode();
+                      },
+                    ),
+                  ),
+                  Divider(),
+                ],
+              ),
+              Column(
+                children: [
+                  Divider(),
+                  ListTile(
+                    onTap: () => {
+                      Navigator.of(context).pushReplacement(
+                          MaterialPageRoute(builder: (context) => loginPage())),
+                      Provider.of<userManager>(context).logOut(),
+                    },
+                    leading: Icon(Icons.logout),
+                    title: Text(Provider.of<userManager>(context).isLogin
+                        ? "LogOut"
+                        : "LogIn"),
+                  ),
+                ],
+              )
+            ],
+          ),
+        );
+      }),
       body: pageList[widget.currentPage],
     );
   }

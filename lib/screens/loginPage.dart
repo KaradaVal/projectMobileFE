@@ -1,3 +1,7 @@
+// ignore_for_file: prefer_const_constructors, sort_child_properties_last
+
+import 'dart:async';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
@@ -117,7 +121,7 @@ class _loginPageState extends State<loginPage> {
                       child: Consumer<userManager>(
                           builder: (context, value, child) {
                         return ElevatedButton(
-                            onPressed: () {
+                            onPressed: () async {
                               checkValid();
                               found = false;
                               if (_validUser && _validPass) {
@@ -127,13 +131,44 @@ class _loginPageState extends State<loginPage> {
                                       element.password ==
                                           _controllerPass.text) {
                                     value.changeUser(element);
+                                    showDialog(
+                                        context: context,
+                                        builder: (context) {
+                                          return AlertDialog(
+                                            // icon: Icon(
+                                            //   Icons.rule,
+                                            //   size: 30,
+                                            //   color: Colors.red,
+                                            // ),
+                                            title: Text("Login",
+                                                style: TextStyle(
+                                                    color: Colors.grey.shade900,
+                                                    fontSize: 30,
+                                                    fontWeight:
+                                                        FontWeight.bold)),
+                                            content: SizedBox(
+                                              height: 150,
+                                              child: Center(
+                                                  child:
+                                                      CircularProgressIndicator(
+                                                color: Colors.purple,
+                                                backgroundColor: Colors.grey,
+                                              )),
+                                            ),
+                                          );
+                                        });
+                                    await Future.delayed(Duration(seconds: 5),
+                                        () {
+                                      setState(() {
+                                        Navigator.pop(context);
+                                      });
+                                    });
                                     Navigator.of(context)
                                         .pushReplacement(MaterialPageRoute(
                                             builder: (context) => mainPage(
                                                   currentPage: 0,
                                                   genre: "",
                                                 )));
-                                    // errorActive = false;
                                     ScaffoldMessenger.of(context)
                                         .showSnackBar(SnackBar(
                                       backgroundColor: Colors.green,
@@ -155,8 +190,6 @@ class _loginPageState extends State<loginPage> {
                                     content: Text(
                                       "Salah Password / Username",
                                     ),
-                                    // action: SnackBarAction(
-                                    //     label: "OKE", onPressed: () {}),
                                   ));
                                 }
                               }

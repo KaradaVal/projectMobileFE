@@ -1,3 +1,5 @@
+// import 'dart:js';
+
 import 'package:flutter/material.dart';
 import 'package:project01/models/comicModel.dart';
 import 'package:project01/models/userModel.dart';
@@ -54,7 +56,14 @@ class userManager with ChangeNotifier {
 
   void changeUser(value) {
     currentUser = value;
+    print(currentUser.pfp);
     isLogin = true;
+  }
+
+  void changePFP(value) {
+    listUsers[listUsers.indexOf(currentUser)].pfp = value;
+    currentUser.pfp = value;
+    notifyListeners();
   }
 
   void logOut() {

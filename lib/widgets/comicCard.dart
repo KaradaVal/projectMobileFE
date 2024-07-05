@@ -70,11 +70,11 @@ class _comicCardState extends State<comicCard> {
                     initialValue: _selectedValue,
                     onSelected: (value) {
                       if (value == "ChapterList") {
-                        // Navigator.of(context).push(MaterialPageRoute(
-                        //     builder: (context) => detailPage(
-                        //           comicData: widget.comicData,
-                        //           initIndex: 1,
-                        //         )));
+                        Navigator.of(context).push(MaterialPageRoute(
+                            builder: (context) => detailPage(
+                                  comicData: widget.comicData,
+                                  initIndex: 1,
+                                )));
                       } else if (value == "FirstChapter") {
                         Navigator.of(context).push(MaterialPageRoute(
                             builder: (context) => mangaPage(
@@ -142,13 +142,13 @@ class _comicCardState extends State<comicCard> {
                       setState(() {});
                     },
                     itemBuilder: (context) => <PopupMenuEntry>[
-                          // PopupMenuItem(
-                          //   value: "ChapterList",
-                          //   child: ListTile(
-                          //     leading: Icon(Icons.list_alt),
-                          //     title: Text("Chapter List"),
-                          //   ),
-                          // ),
+                          PopupMenuItem(
+                            value: "ChapterList",
+                            child: ListTile(
+                              leading: Icon(Icons.list_alt),
+                              title: Text("Chapter List"),
+                            ),
+                          ),
                           PopupMenuItem(
                             value: "FirstChapter",
                             child: ListTile(

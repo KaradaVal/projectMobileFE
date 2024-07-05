@@ -1,9 +1,12 @@
+import 'dart:io';
+
 import 'package:project01/models/comicModel.dart';
 
 class userModel {
   String username;
   String email;
   String password;
+  dynamic pfp = "";
 
   final Set<comicModel> bookmark = {};
   //! NOTE CHAPTER LIST;
