@@ -1,6 +1,10 @@
 import 'dart:async';
 
+import 'package:carousel_slider/carousel_slider.dart';
+import 'package:dots_indicator/dots_indicator.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:project01/data/listComic.dart';
 import 'package:project01/data/theme.dart';
 import 'package:project01/data/user.dart';
@@ -25,6 +29,8 @@ class mainPage extends StatefulWidget {
 
 class _mainPageState extends State<mainPage> {
   bool mode = themeManager().mode;
+
+  int currentDrawerSliderIndex = 0;
 
   List<comicModel> listComic = comicListManager().listComic;
 
@@ -138,42 +144,112 @@ class _mainPageState extends State<mainPage> {
           children: [
             Column(
               children: [
-                Container(
-                  height: 160,
-                  width: double.infinity,
-                  color: Provider.of<themeManager>(context).mode
-                      ? Colors.grey.shade900
-                      : Colors.grey.shade400,
-                  child: Padding(
-                    padding:
-                        const EdgeInsets.symmetric(horizontal: 12, vertical: 0),
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.end,
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        CircleAvatar(
-                          radius: 45,
+                Stack(children: [
+                  CarouselSlider(
+                      items: [
+                        Container(
+                          height: 160,
+                          width: double.infinity,
+                          color: Provider.of<themeManager>(context).mode
+                              ? Colors.grey.shade900
+                              : Colors.grey.shade400,
+                          child: Padding(
+                            padding: const EdgeInsets.symmetric(
+                                horizontal: 12, vertical: 0),
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.start,
+                              crossAxisAlignment: CrossAxisAlignment.center,
+                              children: [
+                                CircleAvatar(
+                                  radius: 50,
+                                  child: Icon(
+                                    Icons.person,
+                                    size: 70,
+                                  ),
+                                ),
+                                SizedBox(
+                                  width: 10,
+                                ),
+                                Column(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Text(
+                                      !Provider.of<userManager>(context).isLogin
+                                          ? "Guest"
+                                          : Provider.of<userManager>(context)
+                                              .currentUser
+                                              .username,
+                                      style: TextStyle(
+                                          fontSize: 20,
+                                          fontWeight: FontWeight.bold),
+                                    ),
+                                    Text(!Provider.of<userManager>(context)
+                                            .isLogin
+                                        ? "Guest"
+                                        : Provider.of<userManager>(context)
+                                            .currentUser
+                                            .email),
+                                  ],
+                                ),
+                                SizedBox(
+                                  height: 8,
+                                )
+                              ],
+                            ),
+                          ),
                         ),
-                        SizedBox(
-                          height: 8,
+                        Container(
+                          height: 160,
+                          width: double.infinity,
+                          color: Provider.of<themeManager>(context).mode
+                              ? Colors.grey.shade900
+                              : Colors.grey.shade400,
+                          child: Padding(
+                            padding: const EdgeInsets.symmetric(
+                                horizontal: 12, vertical: 0),
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.start,
+                              crossAxisAlignment: CrossAxisAlignment.center,
+                              children: [
+                                CircleAvatar(
+                                  radius: 50,
+                                  child: Icon(
+                                    Icons.person,
+                                    size: 70,
+                                  ),
+                                ),
+                                SizedBox(
+                                  width: 10,
+                                ),
+                                ElevatedButton(
+                                    onPressed: () {},
+                                    child: Text(
+                                      "Change Profile \n Picture",
+                                      textAlign: TextAlign.center,
+                                    )),
+                              ],
+                            ),
+                          ),
                         ),
-                        Text(!Provider.of<userManager>(context).isLogin
-                            ? "Guest"
-                            : Provider.of<userManager>(context)
-                                .currentUser
-                                .username),
-                        Text(!Provider.of<userManager>(context).isLogin
-                            ? "Guest"
-                            : Provider.of<userManager>(context)
-                                .currentUser
-                                .email),
-                        SizedBox(
-                          height: 8,
-                        )
                       ],
-                    ),
-                  ),
-                ),
+                      options: CarouselOptions(
+                        onPageChanged: (index, reason) {
+                          setState(() {
+                            currentDrawerSliderIndex = index;
+                          });
+                        },
+                        viewportFraction: 1,
+                        enableInfiniteScroll: false,
+                      )),
+                  Positioned(
+                      bottom: 10,
+                      left: 115,
+                      child: DotsIndicator(
+                        dotsCount: 2,
+                        position: currentDrawerSliderIndex,
+                      )),
+                ]),
                 ListTile(
                   onTap: () => {
                     setState(() {
